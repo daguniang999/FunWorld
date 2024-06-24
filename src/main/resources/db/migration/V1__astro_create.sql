@@ -2,6 +2,7 @@
 create table if not exists `astro_basic_info` (
     info_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name text not null,
+    date text not null,
     type INTEGER NOT NULL,
     strengths text default null,
     weaknesses text default null,

@@ -25,6 +25,12 @@ public class AstroBasicInfo {
     private String name;
 
     /**
+     * 日期
+     */
+    @ApiModelProperty("日期")
+    private String date;
+
+    /**
      * 类型
      */
     @ApiModelProperty("类型")
