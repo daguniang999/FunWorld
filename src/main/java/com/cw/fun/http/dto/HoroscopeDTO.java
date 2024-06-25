@@ -1,4 +1,4 @@
-package com.cw.fun.http;
+package com.cw.fun.http.dto;
 
 import lombok.Data;
 

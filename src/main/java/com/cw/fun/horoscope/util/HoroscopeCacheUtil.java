@@ -1,8 +1,12 @@
 package com.cw.fun.horoscope.util;
 
 import com.cw.fun.astrology.enums.AstrologyType;
-import com.cw.fun.http.HoroscopeDTO;
+import com.cw.fun.horoscope.pojo.response.HoroscopeResponse;
+import com.cw.fun.http.HoroscopeHttpUtil;
+import com.cw.fun.http.dto.HoroscopeDTO;
 import com.cw.fun.http.YouDaoUtil;
+import com.cw.fun.http.dto.HoroscopeHttpDTO;
+import com.cw.fun.http.enums.HoroscopeDayType;
 import com.dtflys.forest.Forest;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -14,7 +18,7 @@ public class HoroscopeCacheUtil {
 
     private static HoroscopeCacheUtil horoscopeCacheUtil;
 
-    private Cache<Integer, String> horoscopeCache = CacheBuilder.newBuilder()
+    private Cache<Integer, HoroscopeHttpDTO> horoscopeCache = CacheBuilder.newBuilder()
             .initialCapacity(12)
             .maximumSize(12)
             .build();
@@ -26,21 +30,16 @@ public class HoroscopeCacheUtil {
         return horoscopeCacheUtil;
     }
 
-    public String getHoroscope(Integer type) {
+    public HoroscopeHttpDTO getHoroscope(Integer type, HoroscopeDayType dayType) {
         try {
-            return horoscopeCache.get(type, new Callable<String>() {
+            return horoscopeCache.get(type, new Callable<HoroscopeHttpDTO>() {
                 @Override
-                public String call() throws Exception {
-                    String url = "https://ohmanda.com/api/horoscope/";
-                    AstrologyType astroType = AstrologyType.getEnumByCode(type);
-                    url += astroType.getEn();
-                    HoroscopeDTO horoscopeData = Forest.get(url).execute(HoroscopeDTO.class);
-                    String translate = YouDaoUtil.getTranslate(horoscopeData.getHoroscope());
-                    return translate;
+                public HoroscopeHttpDTO call() throws Exception {
+                    return HoroscopeHttpUtil.getHoroscopeData(AstrologyType.getEnumByCode(type), dayType);
                 }
             });
         } catch (ExecutionException e) {
-            return "";
+            return new HoroscopeHttpDTO();
         }
     }
 
